@@ -1,20 +1,18 @@
-import moongose from "mongoose";
+import mongoose from "mongoose";
 
 const { MONGODB_URI } = process.env;
-
-if (!MONGODB_URI) {
-  throw new Error('Could not connect to database');
-}
-
-export const connectMongoDB = async () => {
+/**
+ * Single Responsibility Principle (SRP)
+ * Separated functions to connect to DB and check DB status
+ */
+export const connectToDatabase = async (): Promise<void> => {
   try {
-    const {connection} = await moongose.connect(MONGODB_URI);
-
-    if(connection.readyState === 1) {
-      return Promise.resolve(true);
-    }
-
+    await mongoose.connect(MONGODB_URI);
   } catch (error) {
-    return Promise.reject(error);
+    throw new Error('Could not connect to database');
   }
+};
+
+export const isConnectedToDatabase = (): boolean => {
+  return mongoose.connection.readyState === 1;
 };
