@@ -1,14 +1,20 @@
-import React, {useState} from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { Client } from '../../../types/client';
 
-export function ClientForm({ clients, onSubmit }) {
-    const [formData, setFormData] = useState({
+type ClientFormProps = {
+    clients: Client[];
+    onSubmit: React.Dispatch<React.SetStateAction<Client[]>>;
+};
+
+export function ClientForm({ clients, onSubmit } : ClientFormProps) {
+    const [formData, setFormData] = useState<Client>({
             clientName: "",
             CUIT: "",
             address: "",
             condicionIVA: "",
     });
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
         // Make API call to create client using formData
@@ -20,6 +26,7 @@ export function ClientForm({ clients, onSubmit }) {
             },
         });
         const response = await res.json();
+
         // Update clients state
         if (response.success) {
             const newClient = response.newClient;
@@ -28,18 +35,27 @@ export function ClientForm({ clients, onSubmit }) {
                 newClient
             ])
         }
+
+        // Empty form fields
+        setFormData({
+            clientName: "",
+            CUIT: "",
+            address: "",
+            condicionIVA: "",
+        })
+            
     } catch (error) {
         console.error("Error creating client: ", error);
     }
     };
     
-    const handleInputChange = (e) => {
-    const inputName = e.target.name;
-    setFormData({
-        ...formData,
-        [inputName]: e.target.value
-    })
-    }
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const inputName = e.target.name;
+        setFormData({
+            ...formData,
+            [inputName]: e.target.value,
+        });
+    };
         
     return (
         <form onSubmit={handleSubmit}>
@@ -105,27 +121,27 @@ export function ClientForm({ clients, onSubmit }) {
     );
 };
 
-export function ClientList({ clients }) {
-    if (clients) {
-        return (
-            <>
-                <h2 className='mt-6'>Clients:</h2>
-                <ul className="mb-3">
-                    {clients.map((client) => (
-                        <div key={client._id}>
-                            <li>
-                                <span className="mx-3">{client.clientName}</span>
-                                <span className="mx-3">{client.CUIT}</span>
-                                <span className="mx-3">{client.address}</span>
-                                <span className="mx-3">{client.condicionIVA}</span>
-                            </li>
-                            <hr />
-                        </div>
-                    ))}
-                </ul>
-            </>
-        )
-    } else {
-        return <h2> No han llegado los clientes</h2>
-    }
+type ClientListProps = {
+    clients: Client[];
+};
+
+export function ClientList({ clients }: ClientListProps) {
+    return (
+        <>
+            <h2 className='mt-6'>Clients:</h2>
+            <ul className="mb-3">
+                {clients.map((client, index) => (
+                <div key={index}>
+                    <li>
+                    <span className="mx-3">{client.clientName}</span>
+                    <span className="mx-3">{client.CUIT}</span>
+                    <span className="mx-3">{client.address}</span>
+                    <span className="mx-3">{client.condicionIVA}</span>
+                    </li>
+                    <hr />
+                </div>
+                ))}
+            </ul>
+        </>
+    );
 };
