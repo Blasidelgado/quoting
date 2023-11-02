@@ -6,7 +6,7 @@ type ClientFormProps = {
     onSubmit: React.Dispatch<React.SetStateAction<Client[]>>;
 };
 
-export function ClientForm({ clients, onSubmit } : ClientFormProps) {
+export default function ClientForm({ clients, onSubmit } : ClientFormProps) {
     const [formData, setFormData] = useState<Client>({
             clientName: "",
             CUIT: "",
@@ -118,30 +118,5 @@ export function ClientForm({ clients, onSubmit } : ClientFormProps) {
                 </button>
             </div>
         </form>
-    );
-};
-
-type ClientListProps = {
-    clients: Client[];
-};
-
-export function ClientList({ clients }: ClientListProps) {
-    return (
-        <>
-            <h2 className='mt-6'>Clients:</h2>
-            <ul className="mb-3">
-                {clients.map((client, index) => (
-                <div key={index}>
-                    <li>
-                    <span className="mx-3">{client.clientName}</span>
-                    <span className="mx-3">{client.CUIT}</span>
-                    <span className="mx-3">{client.address}</span>
-                    <span className="mx-3">{client.condicionIVA}</span>
-                    </li>
-                    <hr />
-                </div>
-                ))}
-            </ul>
-        </>
     );
 };

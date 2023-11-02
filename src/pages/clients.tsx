@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ClientForm, ClientList } from "@/components/Clients";
+import ClientForm from "@/components/Clients/ClientForm";
+import ClientList from "@/components/Clients/ClientList";
 
 export default function ClientPage() {
   const [clients, setClients] = useState([]);
