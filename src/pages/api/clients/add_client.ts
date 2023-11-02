@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
 
             // Add client in DB
-            const dbResponse = await Client.create({
+            const newClient = await Client.create({
                 clientName,
                 CUIT,
                 address,
@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Respond with success and newly created client
             return res.status(201).json({
                 success: true,
-                dbResponse
+                newClient
             });
         } catch (error) {
             console.error(error)
