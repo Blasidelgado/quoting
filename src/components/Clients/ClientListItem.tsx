@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaEdit, FaSave, FaTimesCircle } from 'react-icons/fa';
+import { FaEdit, FaSave, FaTimesCircle, FaTrash } from 'react-icons/fa';
 import { Client } from "../../../types/client";
 import axios from "axios";
 
@@ -7,10 +7,11 @@ type ClientListItemProps = {
     id: string;
     client: Client;
     handleUpdate: (updatedClient: Client) => void;
+    handleDelete: (clientID: string) => void;
 };
 
 
-export default function ClientListItem({ id, client, handleUpdate }: ClientListItemProps) {
+export default function ClientListItem({ id, client, handleUpdate, handleDelete }: ClientListItemProps) {
     const [originalClient, setOriginalClient] = useState<Client>(client);
     const [editedClient, setEditedClient] = useState<Client>(client);
     const [isEditing, setIsEditing] = useState(false);
@@ -44,6 +45,22 @@ export default function ClientListItem({ id, client, handleUpdate }: ClientListI
         // Reset editedClient to the original client data
         setEditedClient(originalClient);
         setIsEditing(false);
+    }
+
+    const handleDeletion = async (client: Client) => {
+        const confirm = window.confirm(`Estas seguro que queres borrar al cliente ${client.clientName}?`)
+        if (confirm) {
+            try {
+                await axios.delete(`/api/clients/delete_client?id=${id}`);
+
+            // Notify the parent component about the deletion
+            handleDelete(id);
+
+            } catch (error) {
+                console.error('Error deleting client:', error);
+            }
+            handleDelete(id);
+        }
     }
 
     if (isEditing) {
@@ -96,6 +113,14 @@ export default function ClientListItem({ id, client, handleUpdate }: ClientListI
                     className="mx-3 cursor-pointer"
                     onClick={() => {
                         setIsEditing(true);
+                    }}
+                />
+            </span>
+            <span className="mx-3 cursor-pointer inline-block">
+                <FaTrash 
+                    className="mx-3 cursor-pointer"
+                    onClick={() => {
+                        handleDeletion(client)
                     }}
                 />
             </span>

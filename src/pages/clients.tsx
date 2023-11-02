@@ -31,12 +31,16 @@ export default function ClientPage() {
     }));
   }
 
+  function handleDelete(clientID: string) {
+    setClients(clients.filter(client => client._id !== clientID));
+  }
+
   return (
     <div>
         <h1 className="mb-5">Clients</h1>
         <h2 className="mb-5">Add Client</h2>
-        <ClientForm clients={clients} onSubmit={setClients}/>
-        <ClientList clients={clients} handleUpdate={handleUpdate} />
+        <ClientForm clients={clients} onSubmit={setClients} />
+        <ClientList clients={clients} handleUpdate={handleUpdate} handleDelete={handleDelete} />
     </div>
   );
 }
