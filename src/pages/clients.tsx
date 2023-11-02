@@ -1,10 +1,12 @@
+// pages/client.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ClientForm from "@/components/Clients/ClientForm";
 import ClientList from "@/components/Clients/ClientList";
+import { Client } from "../../types/client";
 
 export default function ClientPage() {
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState<Client[]>([]);
 
   useEffect(() => {
     async function fetchClients() {
@@ -19,12 +21,22 @@ export default function ClientPage() {
     fetchClients();
   }, []);
 
+  function handleUpdate(updatedClient: Client) {
+    setClients(clients.map(client => {
+      if (client._id === updatedClient._id) {
+        return updatedClient;
+      } else {
+        return client;
+      }
+    }));
+  }
+
   return (
     <div>
         <h1 className="mb-5">Clients</h1>
         <h2 className="mb-5">Add Client</h2>
         <ClientForm clients={clients} onSubmit={setClients}/>
-        <ClientList clients={clients} />
+        <ClientList clients={clients} handleUpdate={handleUpdate} />
     </div>
   );
-};
+}
