@@ -1,19 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '../../../../lib/mongodb';
-import Client from '../../../../models/client';
+import Product from '../../../../models/Product';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDatabase();
 
     if (req.method === 'DELETE') {
         try {
-            const clientId = req.query.id; // Extract client ID from the request URL params
-            const deletedClient = await Client.findByIdAndDelete(clientId);
+            const productID = req.query.id; // Extract product ID from the request URL params
+            const deletedProduct = await Product.findByIdAndDelete(productID);
 
-            if (deletedClient) {
-                return res.status(200).json({ success: true, message: 'Client deleted successfully.' });
+            if (deletedProduct) {
+                return res.status(200).json({ success: true, message: 'Product deleted successfully.' });
             } else {
-                return res.status(400).json({ success: false, message: 'Client not found.' });
+                return res.status(400).json({ success: false, message: 'Product not found.' });
             }
             } catch (error) {
                 console.error(error);

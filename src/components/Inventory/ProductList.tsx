@@ -15,7 +15,7 @@ export default function ProductList({ products, handleUpdate, handleDelete }: Cl
             <ul className="mb-3">
                 {products.map((product, index) => (
                     <div key={product._id} className='product-item'>
-                        <ProductListItem id={product._id || index} product={product} handleUpdate={handleUpdate} handleDelete={handleDelete} />
+                        <ProductListItem id={product._id || index.toString()} product={product} handleUpdate={handleUpdate} handleDelete={handleDelete} />
                         <hr />
                     </div>
                 ))}

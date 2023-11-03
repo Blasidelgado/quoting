@@ -1,9 +1,11 @@
-// pages/api/products/index.ts
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import Product, { IProduct } from '../../../../models/Product';
+import { connectToDatabase } from '../../../../lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+
+    await connectToDatabase();
+
     if (req.method === 'GET') {
         try {
             // Retrieve all products from the database
