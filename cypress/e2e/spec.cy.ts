@@ -57,6 +57,10 @@ describe('template spec', () => {
     cy.updateClient();
     });
 
+  it('signed-in user cant update empty clients at /client', () => {
+    cy.updateClientEmpty();
+    });
+
   it('signed-in user can delete clients at /client', () => {
     cy.deleteClient();
     });

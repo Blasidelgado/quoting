@@ -83,6 +83,22 @@ Cypress.Commands.add('updateClient', () => {
     cy.contains('9999').should('exist');
 });
 
+Cypress.Commands.add('updateClientEmpty', () => {
+  cy.checkHomePage();
+
+  cy.visit('http://localhost:3000/clients'); // Visit clients page
+
+  // Find the edit button of the first client and click it
+  cy.get('.client-item').first().find('.edit-button').click();
+
+  // Interact with the update form fields and save
+  cy.get('.client-item').first().find('#editClientName').clear();
+  cy.get('.client-item').first().find('.save-button').click();
+
+  // Assert that the client name is updated in the list
+  cy.get('.client-name').invoke('text').should('have.length.above', 3);
+});
+
 Cypress.Commands.add('deleteClient', () => {
     cy.checkHomePage();
 

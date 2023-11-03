@@ -36,6 +36,7 @@ export default function ClientListItem({ id, client, handleUpdate, handleDelete 
             // Notify the parent component about the update
             handleUpdate(editedClient);
         } catch (error) {
+            setIsEditing(false);
             console.error('Error updating client:', error);
         }
     };
