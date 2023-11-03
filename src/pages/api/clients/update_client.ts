@@ -1,10 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Client from '../../../../models/client';
+import { connectToDatabase } from '../../../../lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await connectToDatabase();
+
   if (req.method === 'PUT') { // Allow PUT method only
 
     const clientId = req.query.id as string; // Take id from request query params
+
+    const {clientName, CUIT, address, condicionIVA} = req.body
+
+    // Check the required fields were submitted
+    if (clientName.length < 4 || !CUIT || !address || !condicionIVA) {
+      return res.status(400).json({ error: 'Missing update data' });
+    }
 
     try {
       // Take need-to-update property/ies and client id to update

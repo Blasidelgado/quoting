@@ -1,8 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Client from "../../../../models/client";
+import { connectToDatabase } from "../../../../lib/mongodb";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await connectToDatabase();
+
     if (req.method === "GET") {
       try {
         const clients = await Client.find();

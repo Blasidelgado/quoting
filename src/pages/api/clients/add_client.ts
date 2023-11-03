@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Client from "../../../../models/client";
+import { connectToDatabase } from '../../../../lib/mongodb';
 
 enum CondicionesIVA {
     "mono" = "Monotributista",
@@ -8,6 +9,8 @@ enum CondicionesIVA {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    await connectToDatabase();
+
     if (req.method === "POST") {
         if (!req.body || !req.body.clientName || !req.body.CUIT || !req.body.address || !req.body.condicionIVA) {
             return res.status(400).json({ error: "Incomplete data provided" });

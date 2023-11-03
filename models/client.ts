@@ -4,7 +4,7 @@ const ClientSchema = new Schema ({
     clientName: {
         type: String,
         required: [true, "Name is required"],
-        minLength: [1, "Name must be at least 4 characters long"],
+        minLength: [3, "Name must be at least 3 characters long"],
         maxLength: [40, "Name should be less than 40 characters"]
     },
     CUIT: {
