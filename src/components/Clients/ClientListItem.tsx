@@ -66,32 +66,36 @@ export default function ClientListItem({ id, client, handleUpdate, handleDelete 
     if (isEditing) {
         return (
             <li id={id}>
-                <input 
+                <input
+                    id="editClientName"
                     name="clientName" 
                     type="text" 
                     value={editedClient.clientName}
                     onChange={handleInputChange}
                 />
-                <input 
+                <input
+                    id="editCUIT"
                     name="CUIT" 
                     type="text" 
                     value={editedClient.CUIT}
                     onChange={handleInputChange}
                 />
                 <input 
+                    id="editAddress"
                     name="address" 
                     type="text" 
                     value={editedClient.address}
                     onChange={handleInputChange}
                 />
                 <input 
+                    id="editCondicionIVA"
                     name="condicionIVA" 
                     type="text" 
                     value={editedClient.condicionIVA}
                     onChange={handleInputChange}
                 />
                 <FaSave
-                    className="mx-3 cursor-pointer inline-block"
+                    className="save-button mx-3 cursor-pointer inline-block"
                     onClick={handleSave}
                 />
                 <FaTimesCircle
@@ -104,13 +108,13 @@ export default function ClientListItem({ id, client, handleUpdate, handleDelete 
 
     return (
         <li id={id}>
-            <span className="mx-3">{originalClient.clientName}</span>
-            <span className="mx-3">{originalClient.CUIT}</span>
-            <span className="mx-3">{originalClient.address}</span>
-            <span className="mx-3">{originalClient.condicionIVA}</span>
+            <span className="client-name mx-3">{originalClient.clientName}</span>
+            <span className="client-CUIT mx-3">{originalClient.CUIT}</span>
+            <span className="client-address mx-3">{originalClient.address}</span>
+            <span className="client-condicionIVA mx-3">{originalClient.condicionIVA}</span>
             <span className="mx-3 cursor-pointer inline-block">
                 <FaEdit 
-                    className="mx-3 cursor-pointer"
+                    className="edit-button mx-3 cursor-pointer"
                     onClick={() => {
                         setIsEditing(true);
                     }}
@@ -118,7 +122,7 @@ export default function ClientListItem({ id, client, handleUpdate, handleDelete 
             </span>
             <span className="mx-3 cursor-pointer inline-block">
                 <FaTrash 
-                    className="mx-3 cursor-pointer"
+                    className="delete-button mx-3 cursor-pointer"
                     onClick={() => {
                         handleDeletion(client)
                     }}
