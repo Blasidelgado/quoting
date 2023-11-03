@@ -9,6 +9,7 @@ const productSchema: Schema = new Schema({
   productName: {
     type: String,
     required: true,
+    minLength: [3, "Product name must be at least 3 characters long"],
   },
   stock: {
     type: Number,
