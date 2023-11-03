@@ -1,3 +1,5 @@
+import { IconType } from "react-icons";
+
 export interface NavLinkProps {
     route: string;
     children: React.ReactNode;
@@ -7,8 +9,9 @@ export interface NavLinkProps {
 }
 
 export interface InputProps {
+    id: string,
     placeholder: string;
-    icon: React.ReactNode;
+    icon: IconType;
     type: string;
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -17,6 +20,7 @@ export interface InputProps {
 }
 
 export interface ButtonProps {
+    id: string,
     title: string;
     type: 'submit' | 'button' | 'reset'
     disabled?: boolean

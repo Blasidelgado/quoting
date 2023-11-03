@@ -47,6 +47,7 @@ const LoginForm = () => {
             <h1>Login</h1>
             <form onSubmit={handleLogin}>
                 <InputField
+                    id='login-username'
                     placeholder='Name'
                     type='text'
                     icon={AiOutlineMail}
@@ -55,6 +56,7 @@ const LoginForm = () => {
                     required
                 />
                 <InputField
+                    id='login-password'
                     className='text-black'
                     placeholder='Password'
                     type='password'
@@ -64,6 +66,7 @@ const LoginForm = () => {
                     required
                 />
                 <Button
+                    id="login-submit"
                     type='submit'
                     title='Login'
                     disabled={loading}

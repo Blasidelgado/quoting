@@ -1,12 +1,14 @@
-import React from 'react'
-import { ButtonProps } from '../../../types/propTypes'
+import React from 'react';
+import { ButtonProps } from '../../../types/propTypes';
 
-const Button = ({ title, type}: ButtonProps) => {
+const Button = ({id, title, type}: ButtonProps) => {
     return (
-        <button type={type}>
-            {title}
+        <button 
+            id={id}
+            type={type}>
+                {title}
         </button>
     )
-}
+};
 
-export default Button
+export default Button;
