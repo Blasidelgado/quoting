@@ -15,38 +15,37 @@ export default function ClientForm({ clients, onSubmit } : ClientFormProps) {
     });
 
     const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-        // Make API call to create client using formData
-        const res = await fetch("/api/clients/add_client", {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        const response = await res.json();
+        e.preventDefault();
+        try {
+            // Make API call to create client using formData
+            const res = await fetch("/api/clients/add_client", {
+                method: "POST",
+                body: JSON.stringify(formData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const response = await res.json();
 
-        // Update clients state
-        if (response.success) {
-            const newClient = response.newClient;
-            onSubmit([
-                ...clients,
-                newClient
-            ])
+            // Update clients state
+            if (response.success) {
+                const newClient = response.newClient;
+                onSubmit([
+                    ...clients,
+                    newClient
+                ])
+            }
+
+            // Empty form fields
+            setFormData({
+                clientName: "",
+                CUIT: "",
+                address: "",
+                condicionIVA: "",
+            })
+        } catch (error) {
+            console.error("Error creating client: ", error);
         }
-
-        // Empty form fields
-        setFormData({
-            clientName: "",
-            CUIT: "",
-            address: "",
-            condicionIVA: "",
-        })
-            
-    } catch (error) {
-        console.error("Error creating client: ", error);
-    }
     };
     
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
