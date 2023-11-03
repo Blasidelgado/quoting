@@ -36,7 +36,10 @@ export default function ProductForm({ products, onSubmit } : ProductFormProps) {
             // Update products state
             if (response.success) {
                 const newProduct = response.newProduct;
-                console.log('New product', newProduct, 'created')
+                onSubmit([
+                    ...products,
+                    newProduct
+                ])
             };
 
             // Empty form fields
