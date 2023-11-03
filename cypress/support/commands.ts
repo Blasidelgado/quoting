@@ -35,3 +35,17 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('login', () => {
+    cy.visit('http://localhost:3000/');
+    cy.get('#login-username').type('exampleUser');
+    cy.get('#login-password').type('1234567');
+    cy.get('#login-submit').click();
+    cy.contains('Welcome, exampleUser').should('be.visible');
+  });
+  
+  Cypress.Commands.add('checkNavigationLinks', () => {
+    cy.get('nav').contains('Rusina-system').should('be.visible');
+    cy.get('nav').contains('Clients').should('be.visible');
+    cy.get('nav').contains('Logout').should('be.visible');
+  });
