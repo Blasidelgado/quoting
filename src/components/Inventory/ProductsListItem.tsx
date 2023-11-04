@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { FaEdit, FaSave, FaTimesCircle, FaTrash } from 'react-icons/fa';
 import { Product } from "../../../types/product";
 import axios from "axios";
@@ -6,15 +6,16 @@ import axios from "axios";
 type ClientListItemProps = {
     id: string;
     product: Product;
+    isEditing: boolean;
+    changeEdited: React.Dispatch<SetStateAction<null>>;
     handleUpdate: (updatedClient: Product) => void;
     handleDelete: (clientID: string) => void;
 };
 
 
-export default function ProductListItem({ id, product, handleUpdate, handleDelete }: ClientListItemProps) {
+export default function ProductListItem({ id, product, isEditing, changeEdited, handleUpdate, handleDelete }: ClientListItemProps) {
     const [originalProduct, setOriginalProduct] = useState<Product>(product);
     const [editedProduct, setEditedProduct] = useState<Product>(product);
-    const [isEditing, setIsEditing] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -28,7 +29,7 @@ export default function ProductListItem({ id, product, handleUpdate, handleDelet
             const response = await axios.put(`/api/products/update_product?id=${id}`, editedProduct);
 
             setOriginalProduct(editedProduct);
-            setIsEditing(false);
+            changeEdited(null);
 
             handleUpdate(editedProduct);
         } catch (error) {
@@ -37,7 +38,7 @@ export default function ProductListItem({ id, product, handleUpdate, handleDelet
     }
     const handleCancel = () => {
         setEditedProduct(originalProduct);
-        setIsEditing(false);
+        changeEdited(null);
     }
     const handleDeletion = async (product: Product) => {
         const confirm = window.confirm(`Estas seguro que queres borrar el producto ${product.productName}?`)
@@ -91,7 +92,7 @@ export default function ProductListItem({ id, product, handleUpdate, handleDelet
                 <FaEdit 
                     className="edit-button mx-3 cursor-pointer"
                     onClick={() => {
-                        setIsEditing(true);
+                        changeEdited(id);
                     }}
                 />
             </span>
