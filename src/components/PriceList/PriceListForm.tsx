@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-export default function PriceListForm({ products }) {
-
+export default function PriceListForm({priceLists, updatePriceLists, products, editHandler }) {
     const [priceListName, setPriceListName] = useState('')
 
     async function handleSubmit(event) {
@@ -30,14 +29,16 @@ export default function PriceListForm({ products }) {
 
             if (response.ok) {
                 console.log('Price list created successfully:', data.newList);
-                // Optionally: Redirect or perform any actions upon successful creation
+                updatePriceLists([
+                    ...priceLists,
+                    data.newList
+                ])
+                editHandler(false);
             } else {
                 console.error('Failed to create price list:', data.error);
-                // Optionally: Handle error messages or show them to the user
             }
         } catch (error) {
             console.error('Error creating price list:', error);
-            // Handle network-related errors or internal server errors
         }
     }
 
@@ -49,7 +50,7 @@ export default function PriceListForm({ products }) {
                 <label className="block text-sm font-medium text-gray-600">Nombre de la lista:</label>
                 <input id='list-name' type='text' name='priceListName' className="mt-1 p-2 w-full border rounded"
                     onChange={(e) => setPriceListName(e.target.value)}
-                 />
+                />
             </div>
 
             {products.map((product) => (
@@ -74,7 +75,10 @@ export default function PriceListForm({ products }) {
                 <button type='submit' className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                     Crear nueva lista
                 </button>
+                <button onClick={() => editHandler(false)} type='button' className="px-4 py-2 mx-5 bg-red-500 text-white rounded hover:bg-red-600">
+                    Cancelar
+                </button>
             </div>
         </form>
     );
-}
+};
