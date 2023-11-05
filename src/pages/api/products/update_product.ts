@@ -1,20 +1,46 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import Product from '../../../../models/Product';
+import { NextApiRequest, NextApiResponse } from 'next';
+import Product, { IProduct } from '../../../../models/Product';
+import PriceList from '../../../../models/PriceList';
 import { connectToDatabase } from '../../../../lib/mongodb';
+import mongoose from 'mongoose';
+
+async function updateProductAndPriceLists(productId: string, updateData: any): Promise<IProduct | null> {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+
+        if (!updatedProduct) {
+            throw new Error('Product not found');
+        }
+
+        // Update price lists containing the updated product
+        await PriceList.updateMany(
+            { 'prices.productId': updatedProduct._id },
+            { $set: { 'prices.$.price': updateData.price } },
+            { session }
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+
+        return updatedProduct;
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDatabase();
 
-    if (req.method === 'PUT') { // Allow PUT method only
-        const productID = req.query.id as string; // Take id from request query params
-
-        if (req.body.productName.length < 4) {
-            return res.status(400).json({ error: 'Invalid product' });
-        }
+    if (req.method === 'PUT') {
+        const productId = req.query.id as string;
 
         try {
-            // Take need-to-update property/ies and product id to update
-            const updatedProduct = await Product.findByIdAndUpdate(productID, req.body, { new: true });
+            const updatedProduct = await updateProductAndPriceLists(productId, req.body);
 
             if (!updatedProduct) {
                 return res.status(404).json({ error: 'Product not found' });
