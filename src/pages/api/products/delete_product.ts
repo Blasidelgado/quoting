@@ -1,25 +1,47 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDatabase } from '../../../../lib/mongodb';
 import Product from '../../../../models/Product';
+import PriceList from '../../../../models/PriceList';
+import { connectToDatabase } from '../../../../lib/mongodb';
+import mongoose from 'mongoose';
+
+async function deleteProductAndPriceLists(productId: string): Promise<void> {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        // Delete the product
+        await Product.findByIdAndDelete(productId, { session });
+
+        // Update price lists to remove the deleted product
+        await PriceList.updateMany(
+            { 'prices.productId': new mongoose.Types.ObjectId(productId) }, // Use new keyword here
+            { $pull: { prices: { productId: new mongoose.Types.ObjectId(productId) } } }, // And here
+            { session }
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDatabase();
 
     if (req.method === 'DELETE') {
-        try {
-            const productID = req.query.id; // Extract product ID from the request URL params
-            const deletedProduct = await Product.findByIdAndDelete(productID);
+        const productId = req.query.id as string;
 
-            if (deletedProduct) {
-                return res.status(200).json({ success: true, message: 'Product deleted successfully.' });
-            } else {
-                return res.status(400).json({ success: false, message: 'Product not found.' });
-            }
-            } catch (error) {
-                console.error(error);
-                return res.status(500).json({ success: false, message: 'Internal Server Error' });
-            }
+        try {
+            await deleteProductAndPriceLists(productId);
+            return res.status(200).json({ success: true, message: 'Product deleted successfully.' });
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
     } else {
-        return res.status(405).json({ success: false, message: 'Method Not Allowed' });
+        res.status(405).json({ error: 'Method Not Allowed' });
     }
 };
