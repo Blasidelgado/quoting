@@ -1,22 +1,29 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, models, Document } from 'mongoose';
 import { IProduct } from './Product';
 
 export interface IPriceList extends Document {
-    name: string;
-    products: IProduct['_id'][];
+    priceListName: string;
+    prices: object;
 }
 
 const priceListSchema: Schema = new Schema({
-    name: {
+    priceListName: {
         type: String,
         required: true,
     },
-    products: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Product',
+    prices: [{
+        productId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+        },
+        price: {
+            type: Number,
+            default: 0
+        },
     }],
 });
 
-const PriceList = mongoose.model<IPriceList>('PriceList', priceListSchema);
+const PriceList = models.PriceList || mongoose.model<IPriceList>('PriceList', priceListSchema);
 
 export default PriceList;
