@@ -1,15 +1,12 @@
-// pages/api/products/add_product.ts
-
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '../../../../lib/mongodb';
 import Product, { IProduct } from '../../../../models/Product';
 import PriceList from '../../../../models/PriceList';
 import mongoose from 'mongoose';
 
-// ... (imports and other code)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    await connectToDatabase(); // Connect to MongoDB database
+    await connectToDatabase();
 
     if (req.method === 'POST') {
         try {
@@ -20,29 +17,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(400).json({ error: 'Product name is required.' });
             }
 
-            // Reject duplicated product
-            const productExist = await Product.findOne({ productName });
-            if (productExist) {
-                return res.status(409).json({ error: 'Product already exists' });
-            }
-
-            // Create new product
-            const newProduct: IProduct = new Product({
-                productName,
-                stock,
-            });
-
+            // Start a database transaction
             const session = await mongoose.startSession();
             session.startTransaction();
 
             try {
+                // Create new product
+                const newProduct: IProduct = new Product({
+                    productName,
+                    stock,
+                });
+
                 // Save new product
                 await newProduct.save({ session });
 
-                // Fetch all price lists
+                // Fetch all priceLists
                 const allLists = await PriceList.find();
 
-                // Update all price lists
+                // Update all priceLists
                 const updatedLists = await Promise.all(
                     allLists.map(async (list) => {
                         list.prices.push({ productId: newProduct._id, price: 0 });
@@ -58,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 // Return success response
                 return res.status(201).json({
                     success: true,
-                    newProduct,
+                    newProduct
                 });
             } catch (error) {
                 // Abort the transaction in case of errors
@@ -76,4 +68,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 };
-
