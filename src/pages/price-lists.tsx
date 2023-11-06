@@ -1,109 +1,124 @@
+// pages/price-list.tsx
+
+import React, { useState, useEffect } from 'react';
+import {
+    IPriceList,
+    PriceListItem as PriceListItemType,
+    PriceList as PriceListType
+} from '../../types/priceList';
 import PriceListForm from '@/components/PriceList/PriceListForm';
 import SelectPriceList from '@/components/PriceList/SelectPriceList';
+import PriceList from '@/components/PriceList/PriceList';
+import axios from 'axios';
 import { GetServerSideProps } from 'next';
-import React, {useState, useEffect} from 'react';
-/** 
- * 1- Dos escenarios iniciales posibles al renderizar la pagina /price-lists.
- * - Mostraremos un boton (muy visible) que diga "Crear nueva lista de precios"
- * - Mostraremos un select que tendra:
- * - Opcion preseleccionada: "Selecciona una lista de precios"
- * - Mostraremos una tabla que relacione productos y precios. vacia hasta que se seleccione una lista
- * - Al presionar el boton, debe desaparecer TODO el contenido y solo quedar el formulario de nuevo producto
- * - El formulario contará con dos botones: CREAR - CANCELAR
- * - Presionar CREAR creará el nuevo producto y volverá la pagina a su estado inicial
- * - Presionar CERRAR solo volverá la pagina a su estado inicial
- * - Al seleccionar una lista, se populará la tabla PRODUCTOS - PRECIOS con informacion
- * - Cada producto podrá ser editar SU PRECIO, pero no podrá ser eliminado.
-*/
+import { Product } from '../../types/product';
 
-export default function PriceLists({prevPriceLists, products }) {
+interface PriceListsProps {
+  products: Product[]; // Make sure to import the Product type from your types file
+  prevPriceLists: IPriceList[];
+}
 
-  const [priceLists, setPriceLists] = useState(prevPriceLists);
-  const [isCreating, setIsCreating] = useState(false);
-  const [selectedListId, setSelectedListId] = useState('');
+export default function PriceLists({ prevPriceLists, products }) {
+    const [priceLists, setPriceLists] = useState<PriceListType[]>(prevPriceLists);
+    const [isCreating, setIsCreating] = useState(false);
+    const [selectedListId, setSelectedListId] = useState('');
 
-  useEffect(() => {
-    async function fetchUpdatedLists() {
-        const response = await fetch('api/price_lists');
-        const data = await response.json();
-        const newLists = data.priceLists;
+    useEffect(() => {
+        async function fetchUpdatedLists() {
+            const response = await fetch('api/price_lists');
+            const data = await response.json();
+            const newLists = data.priceLists;
 
-        setPriceLists(newLists);
-    } 
+            setPriceLists(newLists);
+        }
 
-    if (!isCreating) {
-        fetchUpdatedLists();
-    }
-  }, [isCreating]);
+        if (!isCreating) {
+            fetchUpdatedLists();
+        }
+    }, [isCreating]);
 
-    function findProductName(prodId) {
-      const prod = products.find(prod => {
-        return prod._id === prodId;
-      })
-      return prod.productName
-    }
+    const handleUpdatePrice = (priceListId: string, itemId: string, updatedPrice: number) => {
+      const updatedLists = priceLists.map((list) => {
+          if (list._id === priceListId) {
+              const updatedPrices = list.prices.map((item) =>
+                  item._id === itemId ? { ...item, price: updatedPrice } : item
+              );
+              return { ...list, prices: updatedPrices };
+          }
+          return list;
+      });
+      setPriceLists(updatedLists);
+    };
 
-    const selectedList = (function() {
-      const selectedList = priceLists.find(list => list._id === selectedListId);
+    const handleDeleteList = async (priceListId: string) => {
+        try {
+            await axios.delete(`/api/price_lists/delete_price_list?id=${priceListId}`);
+            const updatedLists = priceLists.filter((list) => list._id !== priceListId);
+            setPriceLists(updatedLists);
+            setSelectedListId('');
+        } catch (error) {
+            console.error('Error deleting price list:', error);
+        }
+    };
 
-      return selectedList;
-    })();
-
-    console.log(selectedList);
+    const getSelectedList = priceLists.find(list => list._id === selectedListId)
 
     return (
         <>
             <h1 className='text-3xl text-center'>Listas de precios</h1>
-            { isCreating ? 
-              (
-                <PriceListForm priceLists={priceLists} updatePriceLists={setPriceLists} products={products} editHandler={setIsCreating}/>
-              ) : (
+            {isCreating ? (
+                <PriceListForm
+                    priceLists={priceLists}
+                    updatePriceLists={setPriceLists}
+                    products={products}
+                    editHandler={setIsCreating}
+                />
+            ) : (
                 <>
-                  <button type='button' onClick={() => setIsCreating(true)}>Crear nueva lista</button>
-                  <SelectPriceList allLists={priceLists} selectedId={selectedListId} handleSelectedList={setSelectedListId}/>
-                    <section className="mb-6">
-                      <h2 className="text-2xl font-bold mb-2">{selectedList ? selectedList.priceListName : 'Selecciona una lista' }</h2>
-                        <ul>
-                          <li>
-                            <span>Producto: </span>
-                            <span>Precio: </span>
-                          </li>
-                          {selectedList && (selectedList.prices).map(list => {
-                            return (
-                              <li key={list._id}>
-                                <span>{findProductName(list.productId)}</span>
-                                <span>{list.price}</span>
-                              </li>
-                            )
-                          }
-                          )}
-                        </ul>
-                    </section>
+                    <button type='button' onClick={() => setIsCreating(true)}>
+                        Crear nueva lista
+                    </button>
+                    <SelectPriceList
+                        allLists={priceLists}
+                        selectedId={selectedListId}
+                        handleSelectedList={(listId) => {
+                            setSelectedListId(listId);
+                        }}
+                    />
+                    {getSelectedList && (
+                        <PriceList
+                            selectedList={getSelectedList}
+                            products={products}
+                            handleUpdatePrice={handleUpdatePrice}
+                            onDelete={handleDeleteList}
+                        />
+                    )}
                 </>
-              )
-            }
+            )}
         </>
-    )
-};
+    );
+}
 
-export const getServerSideProps: GetServerSideProps = async () => {
+
+export const getServerSideProps: GetServerSideProps<PriceListsProps> = async () => {
   try {
-    const listsResponse = await fetch('http://localhost:3000/api/price_lists');
-    const {priceLists} = await listsResponse.json();
+      // Fetch priceLists and products data here
+      const listsResponse = await fetch('http://localhost:3000/api/price_lists');
+      const { priceLists } = await listsResponse.json();
 
-    const productsResponse = await fetch('http://localhost:3000/api/products');
-    const products = await productsResponse.json();
+      const productsResponse = await fetch('http://localhost:3000/api/products');
+      const products = await productsResponse.json();
 
-    return {
-      props: {
-        products,
-        prevPriceLists: priceLists
-    },
-    };
+      return {
+          props: {
+              products,
+              prevPriceLists: priceLists,
+          },
+      };
   } catch (error) {
-    console.error(error);
-    return {
-      props: { products: [] },
-    };
+      console.error(error);
+      return {
+          props: { products: [] }, // Handle error case appropriately
+      };
   }
 };

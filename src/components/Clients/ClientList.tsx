@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React from 'react';
 import { Client } from '../../../types/client';
 import ClientListItem from './ClientListItem';
 
@@ -8,7 +8,7 @@ type ClientListProps = {
     handleDelete: (clientID: string) => void;
 };
 
-export default function ClientList({ clients, handleUpdate, handleDelete }: ClientListProps) {
+export default function ClientList({ clients, findProductName, handleUpdate, handleDelete }: ClientListProps) {
     return (
         <>
             <h2 className='mt-6'>Clients:</h2>
