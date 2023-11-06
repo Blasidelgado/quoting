@@ -13,7 +13,7 @@ export default function Inventory() {
     useEffect(() => {
         async function fetchProducts() {
             try {
-                const response = await axios.get("/api/products/");
+                const response = await axios.get("/api/inventory/");
                 setProducts(response.data);
             } catch (error) {
                 console.error("Error fetching products:", error);
