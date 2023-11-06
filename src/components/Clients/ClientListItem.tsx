@@ -27,7 +27,7 @@ export default function ClientListItem({ id, client, handleUpdate, handleDelete 
     const handleSave = async () => {
         try {
             // Send a PUT request to update the client data in the database
-            await axios.put(`/api/clients/update_client?id=${id}`, editedClient);
+            await axios.put(`/api/clients/${id}`, editedClient);
 
             // Update the original client data and exit edit mode
             setOriginalClient(editedClient);
@@ -52,7 +52,7 @@ export default function ClientListItem({ id, client, handleUpdate, handleDelete 
         const confirm = window.confirm(`Estas seguro que queres borrar al cliente ${client.clientName}?`)
         if (confirm) {
             try {
-                await axios.delete(`/api/clients/delete_client?id=${id}`);
+                await axios.delete(`/api/clients/${id}`);
 
             // Notify the parent component about the deletion
             handleDelete(id);
