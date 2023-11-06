@@ -104,8 +104,8 @@ export default function ClientForm({ clients, onSubmit } : ClientFormProps) {
                     defaultValue={formData.condicionIVA}
                     onChange={(e) => handleInputChange(e)}>
                         <option value="" disabled hidden>Select a condition</option>
-                        <option value="mono">Monotributista</option>
-                        <option value="respInsc">Responsable Inscripto</option>
+                        <option value="Monotributista">Monotributista</option>
+                        <option value="Responsable Inscripto">Responsable Inscripto</option>
                 </select>
             </div>
             <div className="mt-2">

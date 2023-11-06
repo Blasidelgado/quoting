@@ -2,11 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import Client from "../../../../models/client";
 import { connectToDatabase } from "../../../../lib/mongodb";
 
-enum CondicionesIVA {
-  "mono" = "Monotributista",
-  "respInsc" = "Responsable Inscripto"
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectToDatabase();
 
@@ -38,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         clientName,
         CUIT,
         address,
-        condicionIVA: CondicionesIVA[condicionIVA]
+        condicionIVA
       });
 
       // Respond with success and newly created client
