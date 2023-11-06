@@ -1,7 +1,4 @@
-// components/PriceList.tsx
-
 import React, { useState } from 'react';
-import axios from 'axios';
 import { IPriceList as PriceListType, PriceListItem as PriceListItemType} from '../../../types/priceList';
 import { Product } from '../../../types/product';
 import PriceListItem from './PriceListItem';

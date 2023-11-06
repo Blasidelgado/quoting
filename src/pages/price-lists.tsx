@@ -1,5 +1,3 @@
-// pages/price-list.tsx
-
 import React, { useState, useEffect } from 'react';
 import {
     IPriceList,
@@ -14,7 +12,7 @@ import { GetServerSideProps } from 'next';
 import { Product } from '../../types/product';
 
 interface PriceListsProps {
-  products: Product[]; // Make sure to import the Product type from your types file
+  products: Product[];
   prevPriceLists: IPriceList[];
 }
 
@@ -102,7 +100,7 @@ export default function PriceLists({ prevPriceLists, products }) {
 
 export const getServerSideProps: GetServerSideProps<PriceListsProps> = async () => {
   try {
-      // Fetch priceLists and products data here
+    
       const listsResponse = await fetch('http://localhost:3000/api/price_lists');
       const { priceLists } = await listsResponse.json();
 
@@ -118,7 +116,9 @@ export const getServerSideProps: GetServerSideProps<PriceListsProps> = async () 
   } catch (error) {
       console.error(error);
       return {
-          props: { products: [] }, // Handle error case appropriately
+          props: {
+            products: [] 
+          },
       };
   }
 };

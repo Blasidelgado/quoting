@@ -1,5 +1,3 @@
-// components/PriceListItem.tsx
-
 import React, { useState } from 'react';
 import { FaEdit, FaSave, FaTimesCircle } from 'react-icons/fa';
 import { PriceListItem as PriceListItemType } from '../../../types/priceList';
@@ -14,7 +12,6 @@ type PriceListItemProps = {
     products: Product[];
     isEditing: boolean;
     handleEdit: (itemId: string | null) => void
-    // handleUpdate: (updatedItem: PriceListItemType) => void;
 };
 
 export default function PriceListItem({
@@ -62,7 +59,6 @@ export default function PriceListItem({
             handleEdit(null);
     
             // Notify the parent component about the update if necessary
-            // handleUpdate(updatedPriceList);
         } catch (error) {
             handleEdit(null);
             console.error('Error updating price list item:', error);
@@ -70,7 +66,6 @@ export default function PriceListItem({
     };
 
     const handleCancel = () => {
-        // Reset editedPriceListItem to the original price list item data
         setEditedPriceListItem(originalPriceListItem);
         handleEdit(null);
     };
