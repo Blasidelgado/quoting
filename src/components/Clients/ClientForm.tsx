@@ -18,7 +18,7 @@ export default function ClientForm({ clients, onSubmit } : ClientFormProps) {
         e.preventDefault();
         try {
             // Make API call to create client using formData
-            const res = await fetch("/api/clients/add_client", {
+            const res = await fetch("/api/clients/", {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
