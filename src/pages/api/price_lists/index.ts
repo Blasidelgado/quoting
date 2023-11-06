@@ -11,12 +11,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Retrieve all lists from the database
             const priceLists = await PriceList.find();
 
-            const products = await Product.find();
-
             // Return the list of lists in the response
-            return res.status(200).json({
-                priceLists,
-            });
+            return res.status(200).json(priceLists);
         } catch (error) {
             console.error(error);
             // Handle database-related errors
