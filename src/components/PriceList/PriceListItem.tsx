@@ -52,14 +52,17 @@ export default function PriceListItem({
             };
     
             // Send a PUT request to update the price list in the database
-            await axios.put(`/api/price_lists/update_price_list?id=${priceListId}`, updatedPriceList);
-    
-            // Update the original price list item data and exit edit mode
-            setOriginalPriceListItem(editedPriceListItem);
-            handleEdit(null);
-    
+            const response = await axios.put(`/api/price_lists/${priceListId}`, updatedPriceList);
+            if (response.status === 200) {
+                // Update the original price list item data and exit edit mode
+                setOriginalPriceListItem(editedPriceListItem);
+                handleEdit(null);
+            } else {
+                throw new Error
+            }
             // Notify the parent component about the update if necessary
         } catch (error) {
+            setEditedPriceListItem(originalPriceListItem);
             handleEdit(null);
             console.error('Error updating price list item:', error);
         }
@@ -81,7 +84,7 @@ export default function PriceListItem({
             <span>{findProductName(item.productId)}</span>
             {isEditing ? (
                 <>
-                    <input id={`${item._id}-price`} name="price" type="text" value={editedPriceListItem.price} onChange={handleInputChange} />
+                    <input id={`${item._id}-price`} name="price" type="text" value={editedPriceListItem.price.toFixed(2)} onChange={handleInputChange} />
                     <FaSave 
                     className="save-button mx-3 cursor-pointer inline-block" 
                     onClick={() => handleSave(priceList._id, item._id, editedPriceListItem.price)} 
@@ -90,7 +93,7 @@ export default function PriceListItem({
                 </>
             ) : (
                 <>
-                    <span>{originalPriceListItem.price}</span>
+                    <span>{originalPriceListItem.price.toFixed(2)}</span>
                     <FaEdit className="edit-button mx-3 cursor-pointer" onClick={() => handleEdit(item._id)} />
                 </>
             )}

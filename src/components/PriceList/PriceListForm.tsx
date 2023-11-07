@@ -14,7 +14,7 @@ export default function PriceListForm({priceLists, updatePriceLists, products, e
         })
 
         try {
-            const response = await fetch('/api/price_lists/add_price_list', {
+            const response = await fetch('/api/price_lists/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

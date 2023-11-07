@@ -41,7 +41,7 @@ export default function PriceLists({ prevPriceLists, products }) {
     const handleDeleteList = async (priceListId: string) => {
         try {
             await axios.delete(
-                `/api/price_lists/delete_price_list?id=${priceListId}`
+                `/api/price_lists/${priceListId}`
             );
             const updatedLists = priceLists.filter(
                 (list) => list._id !== priceListId
@@ -98,7 +98,7 @@ export const getServerSideProps: GetServerSideProps<PriceListsProps> = async () 
         const listsResponse = await fetch("http://localhost:3000/api/price_lists");
         const priceLists = await listsResponse.json();
 
-        const productsResponse = await fetch("http://localhost:3000/api/products");
+        const productsResponse = await fetch("http://localhost:3000/api/inventory");
         const products = await productsResponse.json();
 
         return {
