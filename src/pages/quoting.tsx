@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import QuotingForm from "@/components/Quoting/QuotingForm";
+import QuotingForm from "@/components/Quoting/QuotingFirstPhase";
 import { FaSpinner } from 'react-icons/fa';
 import QuotingList from "@/components/Quoting/QuotingList";
 
@@ -75,9 +75,12 @@ export default function Quoting() {
         switch(isCreating) {
             case 0:
                 return (
-                    <div>
+                    <>
+                    <div className="my-5">
                     <button type="button" onClick={() => setIsCreating(CreatingPhase["firstPhase"])}>New Quoting</button>
                     </div>
+                    <QuotingList quotings={quotings} products={products} priceLists={priceLists} clients={clients} />
+                    </>
                 );
             case 1:
                 return <QuotingForm clients={clients} priceLists={priceLists} onSubmit={updateQuoting} onChange={setIsCreating}/>;
@@ -102,6 +105,7 @@ export default function Quoting() {
             <>
                 <h1 className="my-8">Quoting</h1>
                 {handleStatus()}
+
             </>
         );
     }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { parseISO, format } from 'date-fns';
 import { CreatingPhase } from "@/pages/quoting";
 
-export default function QuotingForm({ clients, priceLists, onSubmit, onChange }) {
+export default function QuotingFirstPhase({ clients, priceLists, onSubmit, onChange }) {
     const [newQuoting, setNewQuoting] = useState({
         date: "",
         number: 0,
