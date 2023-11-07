@@ -1,10 +1,19 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import Quoting from '../../../../models/Quoting';
-import { connectToDatabase } from '../../../../lib/mongodb';
+import { connectToDatabase } from "../../../../lib/mongodb";
+import Quoting from "../../../../models/Quoting";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDatabase();
 
+    if (req.method === 'GET') {
+        try {
+            const quotings = await Quoting.find();
+            return res.status(200).json({ success: true, quotings });
+        } catch (error) {
+            console.error('Error fetching quotings:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
     if (req.method === 'POST') {
         const { number, date, client, concepts, total } = req.body;
 
@@ -24,7 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.error('Error adding quoting:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-    } else {
-        res.status(405).json({ error: 'Method Not Allowed' });
+    }
+    else {
+        return res.status(405).json({ error: 'Method Not Allowed' });
     }
 }

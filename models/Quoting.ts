@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, models } from 'mongoose';
 
 interface QuotingConcept extends Document {
   product: mongoose.Types.ObjectId;
+  quantity: number;
   subtotal: number;
 }
 
@@ -17,6 +18,10 @@ const quotingConceptSchema: Schema = new Schema({
   product: {
     type: Schema.Types.ObjectId,
     ref: 'Product',
+    required: true,
+  },
+  quantity: {
+    type: Number,
     required: true,
   },
   subtotal: {
