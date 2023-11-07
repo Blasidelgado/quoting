@@ -75,9 +75,9 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onEdit, onDelete }) =
     return (
         <div className="border p-4 rounded shadow">
             <h3 className="text-xl font-bold mb-2">{originalProduct.productName}</h3>
-            <p className="text-gray-700 mb-4">{originalProduct.stock} kg.</p>
+            <p className="text-gray-700 mb-4">Stock: {originalProduct.stock} kg.</p>
             <div className="flex justify-between items-center">
-                <div className="flex space-x-2">
+                <div className="flex justify-between items-center space-x-2">
                     <FaEdit className="text-green-600 cursor-pointer text-4xl" onClick={() => setIsEditing(true)} />
                     <FaTrash className="text-red-600 cursor-pointer text-4xl" onClick={handleDeletion} />
                 </div>

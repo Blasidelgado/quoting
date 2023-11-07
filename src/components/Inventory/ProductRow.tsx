@@ -12,7 +12,7 @@ type ProductRowProps = {
     onDelete: (productID: string) => void;
 };
 
-export default function ProductRow ({ id, product, isEditing, changeEdited, onEdit, onDelete }: ProductRowProps) {
+const ProductRow: React.FC<ProductRowProps> = ({ id, product, isEditing, changeEdited, onEdit, onDelete }) => {
     const [originalProduct, setOriginalProduct] = useState<Product>(product);
     const [editedProduct, setEditedProduct] = useState<Product>({ ...product });
 
@@ -84,3 +84,5 @@ export default function ProductRow ({ id, product, isEditing, changeEdited, onEd
         </tr>
     );
 };
+
+export default ProductRow;

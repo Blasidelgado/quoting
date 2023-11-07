@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Product } from '../../types/product';
 import ProductForm from '@/components/Inventory/ProductsForm';
 import axios from 'axios';
-import ProductListItem from '@/components/Inventory/ProductsListItem';
-import ProductsTable from '@/components/Inventory/ProductsTable';
 import ProductsContainer from '@/components/Inventory/ProductsContainer';
+import { Product } from '../../types/product';
 
 type InventoryProps = {};
 
