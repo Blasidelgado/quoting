@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { MenuItem } from "./DesktopMenu"; // Import MenuItem from DesktopMenu
+import { MenuItem } from "./DesktopMenu";
 import { signOut } from "next-auth/react";
 
 const MobileMenu: React.FC = () => {
@@ -11,7 +11,7 @@ const MobileMenu: React.FC = () => {
   };
 
   return (
-    <div className="md:hidden relative">
+    <div className="relative">
       <button onClick={toggleMenu} className="text-white focus:outline-none">
         <svg
           className={`w-6 h-6 ${isOpen ? "transform rotate-180" : ""}`}
@@ -33,7 +33,6 @@ const MobileMenu: React.FC = () => {
           <MenuItem href="/clients">Clients</MenuItem>
           <MenuItem href="/quoting">Quoting</MenuItem>
           <li className="text-white list-none py-2 px-3" onClick={signOut}>Logout</li>
-          {/* Add more menu items as needed */}
         </div>
       )}
     </div>
