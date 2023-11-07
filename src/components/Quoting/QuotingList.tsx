@@ -1,13 +1,23 @@
 import React from "react";
 
-export default function QuotingList({ quotings, products }) {
+export default function QuotingList({ quotings, products, priceLists, clients }) {
+
+    const findUsedList = quoting => {
+        return priceLists.find(list => list._id === quoting.priceList).priceListName
+    }
+
+    const findUsedClient = quoting => {
+        return clients.find(client => client._id === quoting.client).clientName
+    }
+
     return (
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {quotings.map(quoting => (
                 <div key={quoting._id} className="bg-white p-4 rounded-md shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-2 cursor-pointer">
                     <h3 className="text-xl font-semibold mb-2">{quoting.number}</h3>
                     <p className="text-gray-500 mb-2">{quoting.date}</p>
-                    <p className="text-gray-700 mb-4">{quoting.client}</p>
+                    <p className="text-gray-700 mb-4">{findUsedClient(quoting)}</p>
+                    <p className="text-gray-700 mb-4">{findUsedList(quoting)}</p>
                     <ul>
                         {quoting.concepts.map(concept => {
                             const productName = products.find(product => product._id === concept.product)?.productName;
