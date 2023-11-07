@@ -1,32 +1,32 @@
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useState, ChangeEvent } from "react";
 import { FaEdit, FaSave, FaTimesCircle, FaTrash } from 'react-icons/fa';
 import { Product } from "../../../types/product";
 import axios from "axios";
 
-type ClientListItemProps = {
+type ProductListItemProps = {
     id: string;
     product: Product;
     isEditing: boolean;
-    changeEdited: React.Dispatch<SetStateAction<null>>;
-    handleUpdate: (updatedClient: Product) => void;
-    handleDelete: (clientID: string) => void;
+    changeEdited: React.Dispatch<SetStateAction<string | null>>;
+    handleUpdate: (updatedProduct: Product) => void;
+    handleDelete: (productID: string) => void;
 };
 
-
-export default function ProductListItem({ id, product, isEditing, changeEdited, handleUpdate, handleDelete }: ClientListItemProps) {
+export default function ProductListItem({ id, product, isEditing, changeEdited, handleUpdate, handleDelete }: ProductListItemProps) {
     const [originalProduct, setOriginalProduct] = useState<Product>(product);
-    const [editedProduct, setEditedProduct] = useState<Product>(product);
+    const [editedProduct, setEditedProduct] = useState<Product>({ ...product });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setEditedProduct(prevState => ({
             ...prevState,
             [name]: value
         }));
-    }
+    };
+    
     const handleSave = async () => {
         try {
-            const response = await axios.put(`/api/inventory/${id}`, editedProduct);
+            await axios.put(`/api/inventory/${id}`, editedProduct);
 
             setOriginalProduct(editedProduct);
             changeEdited(null);
@@ -55,55 +55,46 @@ export default function ProductListItem({ id, product, isEditing, changeEdited, 
             handleDelete(id);
         }
     }
-    if (isEditing) {
-        return (
-            <li id={(id).toString()}>
-                <input
-                    id="editProductName"
-                    name="productName" 
-                    type="text" 
-                    value={editedProduct.productName}
-                    onChange={handleInputChange}
-                />
-                <input
-                    id="editStock"
-                    name="stock" 
-                    type="text" 
-                    value={editedProduct.stock}
-                    onChange={handleInputChange}
-                />
-                <FaSave
-                    className="save-button mx-3 cursor-pointer inline-block"
-                    onClick={handleSave}
-                />
-                <FaTimesCircle
-                    className="mx-3 cursor-pointer inline-block"
-                    onClick={handleCancel}
-                />
-            </li>
-        );
-    }
-
     return (
-        <li id={id.toString()}>
-            <span className="product-name mx-3">{originalProduct.productName}</span>
-            <span className="product-stock mx-3">{originalProduct.stock}</span>
-            <span className="mx-3 cursor-pointer inline-block">
-                <FaEdit 
-                    className="edit-button mx-3 cursor-pointer"
-                    onClick={() => {
-                        changeEdited(id);
-                    }}
-                />
-            </span>
-            <span className="mx-3 cursor-pointer inline-block">
-                <FaTrash 
-                    className="delete-button mx-3 cursor-pointer"
-                    onClick={() => {
-                        handleDeletion(product)
-                    }}
-                />
-            </span>
+        <li className="border-b py-2 flex items-center justify-between">
+            {isEditing ? (
+                <div className="flex items-center space-x-2">
+                    <input
+                        className="border p-1"
+                        id="editProductName"
+                        name="productName"
+                        type="text"
+                        value={editedProduct.productName}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        className="border p-1"
+                        id="editStock"
+                        name="stock"
+                        type="text"
+                        value={editedProduct.stock}
+                        onChange={handleInputChange}
+                    />
+                </div>
+            ) : (
+                <div className="flex items-center space-x-2">
+                    <span className="text-gray-800">{originalProduct.productName}</span>
+                    <span className="text-gray-600">{originalProduct.stock} kg.</span>
+                </div>
+            )}
+            <div className="flex items-center space-x-2">
+                {isEditing ? (
+                    <>
+                        <FaSave className="text-green-600 cursor-pointer" onClick={handleSave} />
+                        <FaTimesCircle className="text-red-600 cursor-pointer" onClick={handleCancel} />
+                    </>
+                ) : (
+                    <>
+                        <FaEdit className="text-blue-600 cursor-pointer" onClick={() => changeEdited(id)} />
+                        <FaTrash className="text-red-600 cursor-pointer" onClick={() => handleDeletion(product)} />
+                    </>
+                )}
+            </div>
         </li>
     );
 };
