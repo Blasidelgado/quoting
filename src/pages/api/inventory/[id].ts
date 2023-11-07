@@ -23,10 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     if (req.method === 'PUT') {
-        const productId = req.query.id;
-
         try {
-            const updatedProduct = await handleProductUpdate(productId, req.body);
+            const updatedProduct = await handleProductUpdate(id, req.body);
 
             if (!updatedProduct) {
                 return res.status(404).json({ error: 'Product not found' });
@@ -39,10 +37,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     if (req.method === 'DELETE') {
-        const productId = req.query.id;
-
         try {
-            await handleProductDelete(productId);
+            await handleProductDelete(id);
             return res.status(200).json({ success: true, message: 'Product deleted successfully.' });
         } catch (error) {
             console.error('Error deleting product:', error);
