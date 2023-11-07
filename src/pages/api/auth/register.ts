@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { hash } from "bcryptjs";
 import { connectToDatabase } from "../../../../lib/mongodb";
-import User from "../../../../models/user";
+import User from "../../../../models/User";
 import { IUser } from "../../../../types";
 
 

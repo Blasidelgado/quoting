@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
     IPriceList,
     PriceListItem as PriceListItemType,
-    PriceList as PriceListType,
+    IPriceList as PriceListType,
 } from "../../types/priceList";
 import PriceListForm from "@/components/PriceList/PriceListForm";
 import SelectPriceList from "@/components/PriceList/SelectPriceList";

@@ -10,6 +10,7 @@ export interface Quoting extends Document {
   number: string;
   date: Date;
   client: mongoose.Types.ObjectId;
+  PriceList: mongoose.Types.ObjectId;
   concepts: QuotingConcept[];
   total: number;
   isCompleted: boolean;
@@ -43,6 +44,11 @@ const quotingSchema: Schema = new Schema({
   client: {
     type: Schema.Types.ObjectId,
     ref: 'Client',
+    required: true,
+  },
+  priceList: {
+    type: Schema.Types.ObjectId,
+    ref: 'PriceList',
     required: true,
   },
   concepts: [quotingConceptSchema],
