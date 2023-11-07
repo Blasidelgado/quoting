@@ -3,7 +3,8 @@ import { Product } from '../../types/product';
 import ProductForm from '@/components/Inventory/ProductsForm';
 import axios from 'axios';
 import ProductListItem from '@/components/Inventory/ProductsListItem';
-import ProductList from '@/components/Inventory/ProductList';
+import ProductsTable from '@/components/Inventory/ProductsTable';
+import ProductsContainer from '@/components/Inventory/ProductsContainer';
 
 type InventoryProps = {};
 
@@ -41,7 +42,7 @@ export default function Inventory({}: InventoryProps) {
         <div className="my-6">
             <h1 className='text-3xl font-bold mb-6'>Inventory</h1>
             <ProductForm products={products} onSubmit={setProducts} />
-            <ProductList products={products} handleUpdate={handleUpdate} handleDelete={handleDelete} />
+            <ProductsContainer products={products} handleUpdate={handleUpdate} handleDelete={handleDelete} />
         </div>
     );
 }
