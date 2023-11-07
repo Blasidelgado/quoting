@@ -26,7 +26,7 @@ export default function ProductListItem({ id, product, isEditing, changeEdited, 
     }
     const handleSave = async () => {
         try {
-            const response = await axios.put(`/api/products/update_product?id=${id}`, editedProduct);
+            const response = await axios.put(`/api/inventory/${id}`, editedProduct);
 
             setOriginalProduct(editedProduct);
             changeEdited(null);
@@ -44,7 +44,7 @@ export default function ProductListItem({ id, product, isEditing, changeEdited, 
         const confirm = window.confirm(`Estas seguro que queres borrar el producto ${product.productName}?`)
         if (confirm) {
             try {
-                await axios.delete(`/api/products/delete_product?id=${id}`);
+                await axios.delete(`/api/inventory/${id}`);
 
             // Notify the parent component about the deletion
             handleDelete(id);

@@ -24,7 +24,7 @@ export default function ProductForm({ products, onSubmit } : ProductFormProps) {
         e.preventDefault();
         try {
             // Make API call to create product using formData
-            const res = await fetch("/api/products/add_product", {
+            const res = await fetch("/api/inventory/", {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
