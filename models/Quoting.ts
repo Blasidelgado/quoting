@@ -12,6 +12,7 @@ export interface Quoting extends Document {
   client: mongoose.Types.ObjectId;
   concepts: QuotingConcept[];
   total: number;
+  isCompleted: boolean;
 }
 
 const quotingConceptSchema: Schema = new Schema({
@@ -49,6 +50,10 @@ const quotingSchema: Schema = new Schema({
     type: Number,
     required: true,
   },
+  isCompleted: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const Quoting = models.Quoting || mongoose.model<Quoting>('Quoting', quotingSchema);
