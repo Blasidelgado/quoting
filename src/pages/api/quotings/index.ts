@@ -3,7 +3,6 @@ import Quoting from '../../../../models/Quoting';
 import Product from '../../../../models/Product';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import PriceList from '../../../../models/PriceList';
-import { startSession } from 'mongoose';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDatabase();
@@ -34,10 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let quotingTotal = 0;
         const quotingConcepts = [];
         
-        // Start a new session for the transaction
-        const session = await startSession();
-        session.startTransaction();
-
         try {
             for (const concept of concepts) {
                 if (!concept.product || typeof concept.product !== 'string' || !concept.quantity || typeof concept.quantity !== 'number') {
@@ -77,9 +72,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     quantity: concept.quantity,
                     subtotal: subtotal,
                 });
-
-                // Stock updating
-                await Product.findByIdAndUpdate(concept.product, { stock: newStock }, { session });
             }
             
             // Quoting creation
@@ -92,19 +84,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 total: quotingTotal,
                 isCompleted: false, // Quoting is created as pending to complete or reject
             });
-            // Save the quoting inside the transaction
-            await quoting.save({ session });
-    
-            // Commit the transaction
-            await session.commitTransaction();
-            session.endSession();
 
             return res.status(200).json({ success: true, quoting });
         } catch (error) {
-            // Abort the transaction in case of error
-            await session.abortTransaction();
-            session.endSession();
-
             return res.status(500).json({ error: 'Error processing the request' });
         }
     }
