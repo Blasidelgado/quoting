@@ -1,9 +1,9 @@
-// pages/client.tsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ClientForm from "@/components/Clients/ClientForm";
 import ClientList from "@/components/Clients/ClientList";
 import { Client } from "../../types/client";
+import ClientsContainer from "@/components/Clients/ClientsContainer";
 
 export default function ClientPage() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -11,13 +11,13 @@ export default function ClientPage() {
   useEffect(() => {
     async function fetchClients() {
       try {
-        const response = await axios.get("/api/clients");
+        const response = await axios.get<Client[]>("/api/clients");
         setClients(response.data);
       } catch (error) {
         console.error("Error fetching clients:", error);
       }
     }
-    
+
     fetchClients();
   }, []);
 
@@ -36,11 +36,10 @@ export default function ClientPage() {
   }
 
   return (
-    <div>
-        <h1 className="mb-5">Clients</h1>
-        <h2 className="mb-5">Add Client</h2>
-        <ClientForm clients={clients} onSubmit={setClients} />
-        <ClientList clients={clients} handleUpdate={handleUpdate} handleDelete={handleDelete} />
+    <div className="my-6">
+      <h1 className='text-3xl font-bold mb-6'>Clients</h1>
+      <ClientForm clients={clients} onSubmit={setClients} />
+      <ClientsContainer clients={clients} handleUpdate={handleUpdate} handleDelete={handleDelete} />
     </div>
   );
 }
