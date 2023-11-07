@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Product, { IProduct } from '../../../../models/Product';
-import PriceList from '../../../../models/PriceList';
+import Product from '../../../../models/Product';
 import { connectToDatabase } from '../../../../lib/mongodb';
-import mongoose from 'mongoose';
 import { handleProductUpdate, handleProductDelete } from '../../../../lib/productHandler';
 
 
@@ -25,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     if (req.method === 'PUT') {
-        const productId = req.query.id as string;
+        const productId = req.query.id;
 
         try {
             const updatedProduct = await handleProductUpdate(productId, req.body);
@@ -41,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     if (req.method === 'DELETE') {
-        const productId = req.query.id as string;
+        const productId = req.query.id;
 
         try {
             await handleProductDelete(productId);
