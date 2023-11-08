@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check for non numeric prices
         const {prices} = req.body
 
-        const validPrices = prices.every(item => !isNaN(parseFloat(item.price)));
+        const validPrices = prices.every(item => !isNaN(Number((item.price))));
 
         if (!validPrices) {
             return res.status(400).json({ error: 'Prices must be numbers' });
