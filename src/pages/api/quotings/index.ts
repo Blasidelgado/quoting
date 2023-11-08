@@ -8,6 +8,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await connectToDatabase();
 
     if (req.method === 'GET') {
+        const {isCompleted} = req.query;
+
+        if (isCompleted) {
+            const requestedQuotings = await Quoting.find({isCompleted: isCompleted});
+            return res.status(200).json(requestedQuotings);
+        }
+
         try {
             const quotings = await Quoting.find();
             return res.status(200).json({ success: true, quotings });
@@ -84,6 +91,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 total: quotingTotal,
                 isCompleted: false, // Quoting is created as pending to complete or reject
             });
+
+            await quoting.save();
 
             return res.status(200).json({ success: true, quoting });
         } catch (error) {

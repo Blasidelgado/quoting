@@ -27,12 +27,10 @@ export default function Quoting() {
     useEffect(() => {
 
         async function fetchQuotings() {
-            const quotingsResponse = await axios.get("http://localhost:3000/api/quotings");
-            const prevQuotings = quotingsResponse.data;
-
-            if (prevQuotings.success) {
-
-                setQuotings(prevQuotings.quotings);
+            // Get only pending quotings
+            const quotingsResponse = await axios.get("http://localhost:3000/api/quotings?isCompleted=false");
+            if (quotingsResponse.status === 200) {
+                setQuotings(quotingsResponse.data);
             } else {
                 setQuotings([]);
             }
@@ -67,7 +65,7 @@ export default function Quoting() {
         fetchProducts();
     },[])
 
-    function updateQuoting(nextQuoting) {
+    function updateNewQuoting(nextQuoting) {
         setNewQuoting(prevQuoting => ({
             ...prevQuoting, // Spread the previous state
             ...nextQuoting // Spread the new quoting object
@@ -79,16 +77,48 @@ export default function Quoting() {
             ...newQuoting,
             concepts: nextConcepts
         }
-        console.log(finalQuoting);
         try {
             const response = await axios.post("http://localhost:3000/api/quotings", finalQuoting);
-            const nextQuoting = response.data.quoting;
-            setQuotings([
-                ...quotings,
-                nextQuoting
-            ])
+            if (response.status === 200) {
+                const nextQuoting = response.data.quoting;
+                setQuotings([
+                    ...quotings,
+                    nextQuoting
+                ])
+            } else {
+                throw new Error;
+            }
         } catch (error) {
             console.error('Could not create quoting', error)
+        }
+    }
+
+    const handleComplete = async (quotingId) => {
+        try {
+            const response = await axios.put(
+                `http://localhost:3000/api/quotings/${quotingId}`,
+                {isCompleted: true}
+            );
+            if (response.status === 200) {
+                setQuotings(quotings.filter(quoting => quoting._id !== quotingId));
+            } else {
+                throw new Error;
+            }
+        } catch (error) {
+            console.error('Could not complete quoting', error);
+        }
+    }
+
+    const handleDelete = async (quotingId) => {
+        try {
+            const response = await axios.delete(`http://localhost:3000/api/quotings/${quotingId}`);
+            if (response.status === 200) {
+                setQuotings(quotings.filter(quoting => quoting._id !== quotingId));
+            } else {
+                throw new Error;
+            }
+        } catch (error) {
+            console.error('Could not delete quoting', error);
         }
     }
 
@@ -100,11 +130,18 @@ export default function Quoting() {
                     <div className="my-5">
                     <button type="button" onClick={() => setIsCreating(CreatingPhase["firstPhase"])}>New Quoting</button>
                     </div>
-                    <QuotingList quotings={quotings} products={products} priceLists={priceLists} clients={clients} />
+                    <QuotingList 
+                    quotings={quotings} 
+                    products={products} 
+                    priceLists={priceLists} 
+                    clients={clients} 
+                    onComplete={handleComplete}
+                    onDelete={handleDelete}
+                    />
                     </>
                 );
             case 1:
-                return <QuotingForm clients={clients} priceLists={priceLists} onSubmit={updateQuoting} onChange={setIsCreating}/>;
+                return <QuotingForm clients={clients} priceLists={priceLists} onSubmit={updateNewQuoting} onChange={setIsCreating}/>;
             case 2:
                 return <QuotingFinalPhase products={products} onSubmit={handleSubmit} onChange={setIsCreating} />;
             default:

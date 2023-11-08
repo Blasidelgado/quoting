@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function QuotingList({ quotings, products, priceLists, clients }) {
+export default function QuotingList({ quotings, products, priceLists, clients, onComplete, onDelete }) {
 
     const findUsedList = quoting => {
         const usedPriceList = priceLists.find(list => list._id === quoting.priceList).priceListName
@@ -34,6 +34,10 @@ export default function QuotingList({ quotings, products, priceLists, clients })
                     <div className="mt-4 flex justify-between items-center">
                         <span className="font-semibold">Total:</span>
                         <span className="text-blue-500">${quoting.total.toFixed(2)}</span>
+                    </div>
+                    <div>
+                        <button type="button" onClick={() => onComplete(quoting._id)} >Complete</button>
+                        <button type="button" onClick={() => onDelete(quoting._id)} >Delete</button>
                     </div>
                 </div>
             ))}
