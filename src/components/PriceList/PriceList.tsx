@@ -19,28 +19,33 @@ export default function PriceList({ selectedList, products, handleUpdatePrice, o
 
     return (
         <section className='bg-white p-6 rounded-lg shadow-md mb-6'>
-            {selectedList ? (
+            {selectedList? (
                 <>
                     <h2 className='text-2xl font-bold mb-4'>{selectedList.priceListName}</h2>
                     <button className="text-red-500 hover:underline mb-4" onClick={() => onDelete(selectedList._id)}>
                         Eliminar lista
                     </button>
-                    <ul>
-                        <li className='font-semibold mb-2'>
-                            <span className='mr-4'>Producto</span>
-                            <span>Precio</span>
-                        </li>
-                        {selectedList.prices.map((item) => (
-                            <PriceListItem
-                                key={item._id}
-                                priceList={selectedList}
-                                item={item}
-                                products={products}
-                                isEditing={activeId === item._id}
-                                handleEdit={handleEdit}
-                            />
-                        ))}
-                    </ul>
+                    <table className="w-full">
+                        <thead>
+                            <tr>
+                                <th className='text-left'>Product</th>
+                                <th className='text-left'>Price</th>
+                                <th className='text-center'>Update Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {selectedList.prices.map((item) => (
+                                        <PriceListItem
+                                            key={item._id}
+                                            priceList={selectedList}
+                                            item={item}
+                                            products={products}
+                                            isEditing={activeId === item._id}
+                                            handleEdit={handleEdit}
+                                        />
+                                    ))}
+                        </tbody>
+                    </table>
                 </>
             ) : (
                 <p>Selecciona una lista de precios</p>
