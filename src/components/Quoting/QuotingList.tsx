@@ -3,7 +3,8 @@ import React from "react";
 export default function QuotingList({ quotings, products, priceLists, clients }) {
 
     const findUsedList = quoting => {
-        return priceLists.find(list => list._id === quoting.priceList).priceListName
+        const usedPriceList = priceLists.find(list => list._id === quoting.priceList).priceListName
+        return usedPriceList ? usedPriceList : 'Lista eliminada'
     }
 
     const findUsedClient = quoting => {
@@ -24,6 +25,7 @@ export default function QuotingList({ quotings, products, priceLists, clients })
                             return (
                                 <li key={concept._id} className="flex justify-between">
                                     <span>{productName}</span>
+                                    <span>{concept.quantity} kg.</span>
                                     <span>${concept.subtotal.toFixed(2)}</span>
                                 </li>
                             );
