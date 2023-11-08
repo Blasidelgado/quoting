@@ -113,6 +113,7 @@ export const getServerSideProps = async () => {
         return {
             props: {
                 products: [],
+                prevPriceLists: [],
             },
         };
     }
