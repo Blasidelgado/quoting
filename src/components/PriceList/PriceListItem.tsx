@@ -39,7 +39,7 @@ export default function PriceListItem({
             // Create a new array with the updated item
             const updatedPrices = [
                 ...priceList.prices.slice(0, itemIndex),
-                { ...priceList.prices[itemIndex], price: updatedPrice },
+                { ...priceList.prices[itemIndex], price: parseFloat(updatedPrice.toFixed(2)) },
                 ...priceList.prices.slice(itemIndex + 1)
             ];
     
