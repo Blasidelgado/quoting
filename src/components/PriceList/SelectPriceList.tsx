@@ -1,4 +1,3 @@
-import { all } from 'cypress/types/bluebird';
 import React from 'react';
 
 export default function SelectPriceList({allLists, selectedId, handleSelectedList }) {

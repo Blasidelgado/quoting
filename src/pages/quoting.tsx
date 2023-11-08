@@ -26,9 +26,11 @@ export default function Quoting() {
 
     useEffect(() => {
 
+        const BASE_URL = process.env.NODE_ENV === "production" ? process.env.VERCEL : 'http://localhost:3000';
+
         async function fetchQuotings() {
             // Get only pending quotings
-            const quotingsResponse = await axios.get("http://localhost:3000/api/quotings?isCompleted=false");
+            const quotingsResponse = await axios.get(`${BASE_URL}/api/quotings?isCompleted=false`);
             if (quotingsResponse.status === 200) {
                 setQuotings(quotingsResponse.data);
             } else {
@@ -37,21 +39,21 @@ export default function Quoting() {
         }
 
         async function fetchClients() {
-            const clientsResponse = await axios.get("http://localhost:3000/api/clients");
+            const clientsResponse = await axios.get(`${BASE_URL}/api/clients`);
             const prevClients = clientsResponse.data;
 
             setClients(prevClients)
         }
 
         async function fetchPriceLists() {
-            const priceListsResponse = await axios.get("http://localhost:3000/api/price_lists");
+            const priceListsResponse = await axios.get(`${BASE_URL}/api/price_lists`);
             const prevPriceLists = priceListsResponse.data;
 
             setPriceLists(prevPriceLists)
         }
 
         async function fetchProducts() {
-            const productsResponse = await axios.get("http://localhost:3000/api/inventory");
+            const productsResponse = await axios.get(`${BASE_URL}/api/inventory`);
             const prevProducts = productsResponse.data;
 
             setProducts(prevProducts)
@@ -78,7 +80,7 @@ export default function Quoting() {
             concepts: nextConcepts
         }
         try {
-            const response = await axios.post("http://localhost:3000/api/quotings", finalQuoting);
+            const response = await axios.post("/api/quotings", finalQuoting);
             if (response.status === 200) {
                 const nextQuoting = response.data.quoting;
                 setQuotings([
@@ -96,7 +98,7 @@ export default function Quoting() {
     const handleComplete = async (quotingId) => {
         try {
             const response = await axios.put(
-                `http://localhost:3000/api/quotings/${quotingId}`,
+                `/api/quotings/${quotingId}`,
                 {isCompleted: true}
             );
             if (response.status === 200) {
@@ -111,7 +113,7 @@ export default function Quoting() {
 
     const handleDelete = async (quotingId) => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/quotings/${quotingId}`);
+            const response = await axios.delete(`/api/quotings/${quotingId}`);
             if (response.status === 200) {
                 setQuotings(quotings.filter(quoting => quoting._id !== quotingId));
             } else {

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai'
-import Button from '../Button'
 import InputField from './LoginInputField'
 import { loginUser } from '../../../helpers'
 import { useRouter } from 'next/router'
@@ -65,12 +64,14 @@ const LoginForm = () => {
                     onChange={handlePasswordChange}
                     required
                 />
-                <Button
+                <button
                     id="login-submit"
                     type='submit'
                     title='Login'
                     disabled={loading}
-                />
+                >
+                    Login
+                </button>
                 {
                     submitError && 
                     <p>{submitError}</p>

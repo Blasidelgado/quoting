@@ -7,7 +7,6 @@ import PriceListForm from "@/components/PriceList/PriceListForm";
 import SelectPriceList from "@/components/PriceList/SelectPriceList";
 import PriceList from "@/components/PriceList/PriceList";
 import axios from "axios";
-import { GetServerSideProps } from "next";
 import { Product } from "../../types/product";
 
 interface PriceListsProps {
@@ -93,11 +92,14 @@ export default function PriceLists({ prevPriceLists, products } : PriceListsProp
 }
 
 export const getServerSideProps = async () => {
+
+    const BASE_URL = process.env.NODE_ENV === "production" ? process.env.VERCEL : 'http://localhost:3000';
+
     try {
-        const listsResponse = await fetch("http://localhost:3000/api/price_lists");
+        const listsResponse = await fetch(`${BASE_URL}/api/price_lists`);
         const priceLists = await listsResponse.json();
 
-        const productsResponse = await fetch("http://localhost:3000/api/inventory");
+        const productsResponse = await fetch(`${BASE_URL}/api/inventory`);
         const products = await productsResponse.json();
 
         return {
