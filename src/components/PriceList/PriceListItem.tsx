@@ -82,7 +82,7 @@ export default function PriceListItem({
             <span>{findProductName(item.productId)}</span>
             {isEditing ? (
                 <>
-                    <input id={`${item._id}-price`} name="price" type="text" value={editedPriceListItem.price.toFixed(2)} onChange={handleInputChange} />
+                    <input id={`${item._id}-price`} name="price" type="text" value={editedPriceListItem.price} onChange={handleInputChange} />
                     <FaSave 
                     className="save-button mx-3 cursor-pointer inline-block" 
                     onClick={() => handleSave(priceList._id, item._id, editedPriceListItem.price)} 
