@@ -16,7 +16,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ href, children }) => {
 };
 
 const handleSignOutClick = async () => {
-  await signOut({ redirect: false, callbackUrl: "/" } as SignOutParams<false>);
+  await signOut({ redirect: true, callbackUrl: "/" } as SignOutParams<true>);
 };
 
 const DesktopMenu: React.FC = () => {

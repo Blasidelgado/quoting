@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MenuItem } from "./DesktopMenu";
-import { signOut } from "next-auth/react";
+import { SignOutParams, signOut } from "next-auth/react";
 
 const MobileMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +10,7 @@ const MobileMenu: React.FC = () => {
   };
 
   const handleSignOutClick = async () => {
-    await signOut({ redirect: false, callbackUrl: "/" });
+    await signOut({ redirect: true, callbackUrl: "/" } as SignOutParams<true>);
     setIsOpen(false);
   };
 

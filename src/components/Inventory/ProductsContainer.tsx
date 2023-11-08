@@ -18,7 +18,6 @@ const ProductsContainer: React.FC<ProductsContainerProps> = ({ products, handleU
     };
 
     const selectedProduct = products.find((product) => product._id === selectedProductId) || null;
-    console.log(selectedProduct);
     return (
         <div className="mt-6">
             <h2 className="text-2xl font-bold mb-4">Products:</h2>
