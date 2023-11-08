@@ -26,11 +26,9 @@ export default function Quoting() {
 
     useEffect(() => {
 
-        const BASE_URL = process.env.NODE_ENV === "production" ? process.env.VERCEL_URL : 'http://localhost:3000';
-
         async function fetchQuotings() {
             // Get only pending quotings
-            const quotingsResponse = await axios.get(`${BASE_URL}/api/quotings?isCompleted=false`);
+            const quotingsResponse = await axios.get('/api/quotings?isCompleted=false');
             if (quotingsResponse.status === 200) {
                 setQuotings(quotingsResponse.data);
             } else {
@@ -39,21 +37,21 @@ export default function Quoting() {
         }
 
         async function fetchClients() {
-            const clientsResponse = await axios.get(`${BASE_URL}/api/clients`);
+            const clientsResponse = await axios.get('/api/clients');
             const prevClients = clientsResponse.data;
 
             setClients(prevClients)
         }
 
         async function fetchPriceLists() {
-            const priceListsResponse = await axios.get(`${BASE_URL}/api/price_lists`);
+            const priceListsResponse = await axios.get('/api/price_lists');
             const prevPriceLists = priceListsResponse.data;
 
             setPriceLists(prevPriceLists)
         }
 
         async function fetchProducts() {
-            const productsResponse = await axios.get(`${BASE_URL}/api/inventory`);
+            const productsResponse = await axios.get('/api/inventory');
             const prevProducts = productsResponse.data;
 
             setProducts(prevProducts)
