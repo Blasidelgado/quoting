@@ -7,7 +7,7 @@ import { IPriceList } from '../../../types/priceList';
 
 type PriceListItemProps = {
     priceList: IPriceList;
-    item: PriceListItemType;
+    item: any;
     products: Product[];
     isEditing: boolean;
     handleEdit: (itemId: string | null) => void
@@ -25,21 +25,24 @@ export default function PriceListItem({
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+
         setEditedPriceListItem((prevState) => ({
             ...prevState,
             [name]: value,
-        }));
+        }))
     };
 
     const handleSave = async (priceListId: string, itemId: string, updatedPrice: number) => {
+        
         try {
+
             // Find the index of the item to be updated in the prices array
             const itemIndex = priceList.prices.findIndex(item => item._id === itemId);
     
             // Create a new array with the updated item
             const updatedPrices = [
                 ...priceList.prices.slice(0, itemIndex),
-                { ...priceList.prices[itemIndex], price: parseFloat(updatedPrice.toFixed(2)) },
+                { ...priceList.prices[itemIndex], price: updatedPrice },
                 ...priceList.prices.slice(itemIndex + 1)
             ];
     
@@ -76,6 +79,7 @@ export default function PriceListItem({
         const prod = products.find((prod) => prod._id === prodId);
         return prod?.productName;
     }
+    
 
     return (
         <li id={item._id}>
@@ -91,7 +95,7 @@ export default function PriceListItem({
                 </>
             ) : (
                 <>
-                    <span>{originalPriceListItem.price.toFixed(2)}</span>
+                    <span>{originalPriceListItem.price}</span>
                     <FaEdit className="edit-button mx-3 cursor-pointer" onClick={() => handleEdit(item._id)} />
                 </>
             )}
