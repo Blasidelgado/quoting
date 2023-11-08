@@ -4,7 +4,7 @@ import ProductRow from './ProductRow';
 
 type ProductTableProps = {
     products: Product[];
-    onEdit: (productId: string) => void;
+    onEdit: (updatedProduct: Product) => void;
     onDelete: (productId: string) => void;
 };
 

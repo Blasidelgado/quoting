@@ -5,7 +5,7 @@ import { Client } from '../../../types/client';
 
 type ClientsContainerProps = {
     clients: Client[];
-    handleUpdate: (id: string) => void;
+    handleUpdate: (updatedClient: Client) => void;
     handleDelete: (id: string) => void
 };
 

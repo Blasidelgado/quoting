@@ -6,7 +6,7 @@ import ProductsTable from './ProductsTable';
 
 type ProductsContainerProps = {
     products: Product[];
-    handleUpdate: (id: string) => void;
+    handleUpdate: (updatedProduct: Product) => void;
     handleDelete: (id: string) => void
 };
 

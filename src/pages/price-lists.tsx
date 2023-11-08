@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     IPriceList,
-    PriceListItem as PriceListItemType,
     IPriceList as PriceListType,
 } from "../../types/priceList";
 import PriceListForm from "@/components/PriceList/PriceListForm";
@@ -16,7 +15,7 @@ interface PriceListsProps {
     prevPriceLists: IPriceList[];
 }
 
-export default function PriceLists({ prevPriceLists, products }) {
+export default function PriceLists({ prevPriceLists, products } : PriceListsProps) {
     const [priceLists, setPriceLists] = useState<PriceListType[]>(prevPriceLists);
     const [isCreating, setIsCreating] = useState(false);
     const [selectedListId, setSelectedListId] = useState("");
@@ -93,7 +92,7 @@ export default function PriceLists({ prevPriceLists, products }) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps<PriceListsProps> = async () => {
+export const getServerSideProps = async () => {
     try {
         const listsResponse = await fetch("http://localhost:3000/api/price_lists");
         const priceLists = await listsResponse.json();

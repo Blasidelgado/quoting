@@ -7,7 +7,8 @@ import { handleProductUpdate, handleProductDelete } from '../../../../lib/produc
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDatabase();
 
-    const { id } = req.query;
+    let { id } = req.query;
+    id = (typeof id === 'object') ? id[0] : id;
 
     if (req.method === 'GET') {
         try {

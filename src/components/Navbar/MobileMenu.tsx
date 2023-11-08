@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import { MenuItem } from "./DesktopMenu";
 import { signOut } from "next-auth/react";
 
@@ -8,6 +7,11 @@ const MobileMenu: React.FC = () => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleSignOutClick = async () => {
+    await signOut({ redirect: false, callbackUrl: "/" });
+    setIsOpen(false);
   };
 
   return (
@@ -32,7 +36,7 @@ const MobileMenu: React.FC = () => {
           <MenuItem href="/price-lists">Price Lists</MenuItem>
           <MenuItem href="/clients">Clients</MenuItem>
           <MenuItem href="/quoting">Quoting</MenuItem>
-          <li className="text-white list-none py-2 px-3" onClick={signOut}>Logout</li>
+          <li className="text-white list-none py-2 px-3" onClick={handleSignOutClick}>Logout</li>
         </div>
       )}
     </div>

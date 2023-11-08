@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ClientForm from "@/components/Clients/ClientForm";
-import ClientList from "@/components/Clients/ClientList";
 import { Client } from "../../types/client";
 import ClientsContainer from "@/components/Clients/ClientsContainer";
 

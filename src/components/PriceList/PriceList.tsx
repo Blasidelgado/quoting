@@ -34,12 +34,10 @@ export default function PriceList({ selectedList, products, handleUpdatePrice, o
                             <PriceListItem
                                 key={item._id}
                                 priceList={selectedList}
-                                itemId={item._id}
                                 item={item}
                                 products={products}
                                 isEditing={activeId === item._id}
                                 handleEdit={handleEdit}
-                                handleUpdatePrice={handleUpdatePrice}
                             />
                         ))}
                     </ul>

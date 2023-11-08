@@ -7,7 +7,6 @@ import { IPriceList } from '../../../types/priceList';
 
 type PriceListItemProps = {
     priceList: IPriceList;
-    itemId: string;
     item: PriceListItemType;
     products: Product[];
     isEditing: boolean;
@@ -16,7 +15,6 @@ type PriceListItemProps = {
 
 export default function PriceListItem({
     priceList,
-    itemId,
     item,
     products,
     isEditing,
