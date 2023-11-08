@@ -26,6 +26,7 @@ const DesktopMenu: React.FC = () => {
       <MenuItem href="/inventory">Inventory</MenuItem>
       <MenuItem href="/price-lists">Price Lists</MenuItem>
       <MenuItem href="/clients">Clients</MenuItem>
+      <MenuItem href="/quoting">Quoting</MenuItem>
       <li className="text-white hover:text-gray-300 list-none py-2 px-3 cursor-pointer" onClick={handleSignOutClick}>Logout</li>
     </div>
   );
