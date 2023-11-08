@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    IPriceList,
-    IPriceList as PriceListType,
+IPriceList as PriceListType,
 } from "../../types/priceList";
 import PriceListForm from "@/components/PriceList/PriceListForm";
 import SelectPriceList from "@/components/PriceList/SelectPriceList";
@@ -9,15 +8,31 @@ import PriceList from "@/components/PriceList/PriceList";
 import axios from "axios";
 import { Product } from "../../types/product";
 
-interface PriceListsProps {
-    products: Product[];
-    prevPriceLists: IPriceList[];
-}
 
-export default function PriceLists({ prevPriceLists, products } : PriceListsProps) {
-    const [priceLists, setPriceLists] = useState<PriceListType[]>(prevPriceLists);
+export default function PriceLists() {
+    const [priceLists, setPriceLists] = useState<PriceListType[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [isCreating, setIsCreating] = useState(false);
     const [selectedListId, setSelectedListId] = useState("");
+
+    useEffect(() => {
+        async function fetchPriceLists() {
+            const priceListsResponse = await axios.get('/api/price_lists');
+            const prevPriceLists = priceListsResponse.data;
+
+            setPriceLists(prevPriceLists)
+        }
+
+        async function fetchProducts() {
+            const productsResponse = await axios.get('/api/inventory');
+            const prevProducts = productsResponse.data;
+
+            setProducts(prevProducts)
+        }
+
+        fetchPriceLists();
+        fetchProducts();
+    },[])
 
     const handleUpdatePrice = (
         priceListId: string,
@@ -90,31 +105,3 @@ export default function PriceLists({ prevPriceLists, products } : PriceListsProp
         </>
     );
 }
-
-export const getServerSideProps = async () => {
-
-    const BASE_URL = process.env.NODE_ENV === "production" ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000';
-
-    try {
-        const listsResponse = await fetch(`${BASE_URL}/api/price_lists`);
-        const priceLists = await listsResponse.json();
-
-        const productsResponse = await fetch(`${BASE_URL}/api/inventory`);
-        const products = await productsResponse.json();
-
-        return {
-            props: {
-                products,
-                prevPriceLists: priceLists,
-            },
-        };
-    } catch (error) {
-        console.error(error);
-        return {
-            props: {
-                products: [],
-                prevPriceLists: [],
-            },
-        };
-    }
-};
