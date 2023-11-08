@@ -26,7 +26,7 @@ export default function Quoting() {
 
     useEffect(() => {
 
-        const BASE_URL = process.env.NODE_ENV === "production" ? process.env.VERCEL : 'http://localhost:3000';
+        const BASE_URL = process.env.NODE_ENV === "production" ? process.env.VERCEL_URL : 'http://localhost:3000';
 
         async function fetchQuotings() {
             // Get only pending quotings

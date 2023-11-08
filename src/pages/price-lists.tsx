@@ -93,7 +93,7 @@ export default function PriceLists({ prevPriceLists, products } : PriceListsProp
 
 export const getServerSideProps = async () => {
 
-    const BASE_URL = process.env.NODE_ENV === "production" ? process.env.VERCEL : 'http://localhost:3000';
+    const BASE_URL = process.env.NODE_ENV === "production" ? process.env.VERCEL_URL : 'http://localhost:3000';
 
     try {
         const listsResponse = await fetch(`${BASE_URL}/api/price_lists`);
