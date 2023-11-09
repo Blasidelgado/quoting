@@ -4,9 +4,8 @@ import axios from 'axios';
 import ProductsContainer from '@/components/Inventory/ProductsContainer';
 import { Product } from '../../types/product';
 
-type InventoryProps = {};
 
-export default function Inventory({}: InventoryProps) {
+export default function Inventory() {
     const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(() => {

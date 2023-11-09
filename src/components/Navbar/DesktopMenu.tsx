@@ -22,8 +22,7 @@ const handleSignOutClick = async () => {
 const DesktopMenu: React.FC = () => {
   return (
     <div className="hidden md:flex space-x-4">
-      <MenuItem href="/">Home</MenuItem>
-      <MenuItem href="/inventory">Inventory</MenuItem>
+      <MenuItem href="/">Inventory</MenuItem>
       <MenuItem href="/price-lists">Price Lists</MenuItem>
       <MenuItem href="/clients">Clients</MenuItem>
       <MenuItem href="/quoting">Quoting</MenuItem>

@@ -31,8 +31,7 @@ const MobileMenu: React.FC = () => {
       </button>
       {isOpen && (
         <div className="absolute top-0 right-0 mt-5 bg-gray-800 rounded shadow-lg py-4 px-6 w-56 flex flex-col items-center transition-all duration-500 ease-in-out">
-          <MenuItem href="/">Home</MenuItem>
-          <MenuItem href="/inventory">Inventory</MenuItem>
+          <MenuItem href="/">Inventory</MenuItem>
           <MenuItem href="/price-lists">Price Lists</MenuItem>
           <MenuItem href="/clients">Clients</MenuItem>
           <MenuItem href="/quoting">Quoting</MenuItem>
