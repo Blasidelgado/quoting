@@ -35,9 +35,21 @@ export default function QuotingList({ quotings, products, priceLists, clients, o
                         <span className="font-semibold">Total:</span>
                         <span className="text-blue-500">${quoting.total.toFixed(2)}</span>
                     </div>
-                    <div>
-                        <button type="button" onClick={() => onComplete(quoting._id)} >Complete</button>
-                        <button type="button" onClick={() => onDelete(quoting._id)} >Delete</button>
+                    <div className="flex justify-around py-5 yx-2">
+                        <button 
+                        type="button"
+                        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+                        onClick={() => onComplete(quoting._id)}
+                        >
+                            Complete
+                        </button>
+                        <button 
+                        type="button"
+                        className="mt-4 bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+                        onClick={() => onDelete(quoting._id)} 
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
             ))}

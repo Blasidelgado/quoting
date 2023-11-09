@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import SelectedProductsList from './SelectedProductsList';
-
 import { CreatingPhase } from '@/pages/quoting';
-import ProductSelect from '../Inventory/ProductSelect';
 import QuotingSelect from './QuotingSelect';
+
 
 export default function QuotingFinalPhase({ products, onSubmit, onChange }) {
   const [concepts, setConcepts] = useState([]);
@@ -29,7 +28,8 @@ export default function QuotingFinalPhase({ products, onSubmit, onChange }) {
       onSubmit(concepts);
       onChange(CreatingPhase.notCreating);
     } else {
-      // Manejar el caso de error si no se han seleccionado productos
+      setAvailableProducts(products);
+      setConcepts([]);
     }
   }
 
@@ -38,9 +38,14 @@ export default function QuotingFinalPhase({ products, onSubmit, onChange }) {
       <h2 className="text-xl font-medium mb-4">Select Products and Quantities</h2>
       <QuotingSelect products={products} availableProducts={availableProducts} onAdd={handleConceptSelect} />
       <SelectedProductsList concepts={concepts} products={products} onRemove={handleConceptRemove}/>
-      <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
-        Submit Concepts
-      </button>
+      <div className='flex justify-around'>
+        <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+          Submit Concepts
+        </button>
+        <button onClick={() => onChange(CreatingPhase["firstPhase"])} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mt-4">
+          Go back
+        </button>
+      </div>
     </div>
   );
 }

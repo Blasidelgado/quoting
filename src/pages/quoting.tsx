@@ -124,23 +124,31 @@ export default function Quoting() {
 
     const handleStatus = () => {
         switch(isCreating) {
-            case 0:
+            case 0: // User is not in the process of creating a new quoting
                 return (
                     <>
-                    <div className="my-5">
-                    <button type="button" onClick={() => setIsCreating(CreatingPhase["firstPhase"])}>New Quoting</button>
-                    </div>
-                    <QuotingList 
-                    quotings={quotings} 
-                    products={products} 
-                    priceLists={priceLists} 
-                    clients={clients} 
-                    onComplete={handleComplete}
-                    onDelete={handleDelete}
-                    />
+                        <div className="mt-6">
+                            <button
+                            type="button" 
+                            className='rounded-md bg-green-600 px-5 py-4 text-md font-semibold text-white shadow-md hover:bg-green-500 
+                            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                            onClick={() => setIsCreating(CreatingPhase["firstPhase"])}
+                            >
+                                New Quoting
+                            </button>
+                        </div>
+                        <hr className="my-6" />
+                        <QuotingList 
+                        quotings={quotings} 
+                        products={products} 
+                        priceLists={priceLists} 
+                        clients={clients} 
+                        onComplete={handleComplete}
+                        onDelete={handleDelete}
+                        />
                     </>
                 );
-            case 1:
+            case 1: // User is in first-phase of creating a new quoting
                 return <QuotingForm clients={clients} priceLists={priceLists} onSubmit={updateNewQuoting} onChange={setIsCreating}/>;
             case 2:
                 return <QuotingFinalPhase products={products} onSubmit={handleSubmit} onChange={setIsCreating} />;
@@ -160,15 +168,15 @@ export default function Quoting() {
         )
     } else {
         return (
-            <>
-                <h1 className="my-8">Quoting</h1>
+            <div className="m-6">
+                <h1 className='text-3xl font-bold mb-6'>Quoting</h1>
                 {handleStatus()}
                 {isSubmittable ? 
-                <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
-                Submit Quotation
-                </button>
-                : null} 
-            </>
+                    <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+                        Submit Quotation
+                    </button>
+                    : null} 
+            </div>
         );
     }
 }
